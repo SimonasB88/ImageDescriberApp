@@ -1,10 +1,14 @@
 from fastapi import FastAPI, File, UploadFile
 from google.cloud import vision
 from google.oauth2 import service_account
+from pymongo import MongoClient
 import io
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Initialize MongoDB client
+mongo_client = MongoClient('mongodb://localhost:27017/')
 
 # Load the service account key file and initialize the Vision client
 credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
