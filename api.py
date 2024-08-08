@@ -7,7 +7,7 @@ import io
 app = FastAPI()
 
 # Load the service account key file and initialize the Vision client
-credentials = service_account.Credentials.from_service_account_file('path/to/your/service-account-file.json')
+credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
 @app.post("/analyze-image/")
