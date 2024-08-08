@@ -2,6 +2,7 @@ from fastapi import FastAPI, File, UploadFile
 from google.cloud import vision
 from google.oauth2 import service_account
 from pymongo import MongoClient
+import datetime
 import io
 
 # Initialize FastAPI app
@@ -9,6 +10,9 @@ app = FastAPI()
 
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
+
+db = mongo_client["vision_api_history"]
+collection = db["vision_api_history_collection"]
 
 # Load the service account key file and initialize the Vision client
 credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
@@ -28,6 +32,16 @@ async def analyze_image(file: UploadFile = File(...)):
     # Extract labels and their descriptions
     labels = response.label_annotations
     results = [{"description": label.description, "score": label.score} for label in labels]
+    
+    # Prepare data to store in MongoDB
+    query_data = {
+    "file_name": file.filename,
+    "results": results,
+    "timestamp": datetime.datetime.utcnow()
+    }
+
+    # Insert the data into MongoDB
+    collection.insert_one(query_data)
 
     return {"labels": results}
 
