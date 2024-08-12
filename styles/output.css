@@ -9,6 +9,7 @@
 }
 .font-family {
     font-family: Arial, sans-serif;
+    color: antiquewhite;
 }
 .button {
     background-color: #0099e0;
@@ -33,4 +34,7 @@
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+}
+.background-svg-pattern {
+    background-image: linear-gradient(to right, #00232e, #0099e0);
 }
