@@ -1,11 +1,34 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from google.cloud import vision
 from google.oauth2 import service_account
 from pymongo import MongoClient
 import datetime
+import os
 
 # Initialize FastAPI app
 app = FastAPI()
+
+# Mount the static files directory
+app.mount("/styles", StaticFiles(directory="styles"), name="output.css")
+
+# Function to read the index.html file
+def read_index_html():
+    file_path = os.path.join(os.path.dirname(__file__), "index.html")
+    with open(file_path, "r") as file:
+        html_content = file.read()
+    return html_content
+
+# Initialize the server that returns HTML at root
+@app.get("/", response_class=HTMLResponse)
+async def read_root():
+    return HTMLResponse(content=read_index_html(), status_code=200)
+
+# Serve index.html for /index.html path as well
+@app.get("/index.html", response_class=HTMLResponse)
+async def serve_index_html():
+    return HTMLResponse(content=read_index_html(), status_code=200)
 
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
@@ -34,9 +57,9 @@ async def analyze_image(file: UploadFile = File(...)):
     
     # Prepare data to store in MongoDB
     query_data = {
-    "file_name": file.filename,
-    "results": results,
-    "timestamp": datetime.datetime.utcnow()
+        "file_name": file.filename,
+        "results": results,
+        "timestamp": datetime.datetime.utcnow()
     }
 
     # Insert the data into MongoDB
