@@ -3,7 +3,6 @@ from google.cloud import vision
 from google.oauth2 import service_account
 from pymongo import MongoClient
 import datetime
-import io
 
 # Initialize FastAPI app
 app = FastAPI()
