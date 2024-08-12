@@ -11,8 +11,8 @@
   Please upload an image and I will describe it for you!
   </h1>
   <div class="align">
-  <form action="/upload" method="POST" enctype="multipart/form-data" class="button align">
-    <input type="file" name="image" accept="image/*">
+  <form action="/analyze-image/" method="post" enctype="multipart/form-data" class="button align">
+    <input type="file" id="file" name="file" accept="image/*">
     <button type="submit" class="button-style">Upload</button>
   </form>
 </body>

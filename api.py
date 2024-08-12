@@ -30,16 +30,7 @@ async def read_root():
 async def serve_index_html():
     return HTMLResponse(content=read_index_html(), status_code=200)
 
-# Initialize MongoDB client
-mongo_client = MongoClient('mongodb://localhost:27017/')
-
-db = mongo_client["vision_api_history"]
-collection = db["vision_api_history_collection"]
-
-# Load the service account key file and initialize the Vision client
-credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
-client = vision.ImageAnnotatorClient(credentials=credentials)
-
+# Function to analyze the image and store the results in MongoDB
 @app.post("/analyze-image/")
 async def analyze_image(file: UploadFile = File(...)):
     # Read the image file
@@ -59,13 +50,23 @@ async def analyze_image(file: UploadFile = File(...)):
     query_data = {
         "file_name": file.filename,
         "results": results,
-        "timestamp": datetime.datetime.utcnow()
+        "timestamp": datetime.datetime.now()
     }
 
     # Insert the data into MongoDB
     collection.insert_one(query_data)
 
     return {"labels": results}
+
+# Initialize MongoDB client
+mongo_client = MongoClient('mongodb://localhost:27017/')
+
+db = mongo_client["vision_api_history"]
+collection = db["vision_api_history_collection"]
+
+# Load the service account key file and initialize the Vision client
+credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
+client = vision.ImageAnnotatorClient(credentials=credentials)
 
 if __name__ == "__main__":
     import uvicorn
