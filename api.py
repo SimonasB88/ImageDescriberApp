@@ -7,11 +7,6 @@ import datetime
 # Initialize FastAPI app
 app = FastAPI()
 
-# Initialize homepage route
-@app.get("/")
-async def read_root():
-    return {"message": "Welcome to the Image Analysis API!"}
-
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
 

@@ -4,11 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./output.css" rel="stylesheet">
+  <link href="/styles/output.css" rel="stylesheet">
 </head>
 <body>
   <h1 class="text-3xl font-bold underline align font-family">
     Please upload an image and I will describe it for you!
   </h1>
+  <div class="align">
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="button align">
+        <input type="file" name="image" accept="image/*">
+        <button type="submit" class="button-style">Upload</button>
+    </form>
 </body>
 </html>
