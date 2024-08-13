@@ -17,25 +17,24 @@
 
         <!-- Display the results here -->
         <div class="results-container font-family">
-            <ul>
-            {% for record in history_records %}
-                <li>
-                <p class="mb-2">
-                    <strong>Image:</strong> {{ record.image_name }} <br>
-                    <strong>Date:</strong> {{ record.date }} <br>
-                    <strong>Labels:</strong>
-                </p>
-                <ul>
-                    {% for label in record.labels %}
-                    <li>
-                        <strong>Keyword:</strong> {{ label.description }} <br>
-                        <strong>Confidence Score:</strong> {{ label.score | round(2) }}
-                    </li>
+            {% if results %}
+                <ul class="space-y-6">
+                    {% for result in results %}
+                        <li class="p-4 border-b border-gray-200">
+                            <strong>File Name:</strong> {{ result.file_name }} <br>
+                            <strong>Timestamp:</strong> {{ result.timestamp }} <br>
+                            <strong>Results:</strong>
+                            <ul class="list-disc pl-5 mt-2">
+                                {% for label in result.results %}
+                                    <li>{{ label.description }} (Confidence: {{ label.score | round(2) }})</li>
+                                {% endfor %}
+                            </ul>
+                        </li>
                     {% endfor %}
                 </ul>
-                </li>
-            {% endfor %}
-            </ul>
+            {% else %}
+                <p>No history records found.</p>
+            {% endif %}
         </div>
 
         <a href="/" class="font-family text-blue-600 mt-6 inline-block">Go back to upload another image</a>

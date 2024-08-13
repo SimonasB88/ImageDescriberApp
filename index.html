@@ -1,23 +1,32 @@
 <!doctype html>
 <html>
-  <title>ImageDescriber App</title>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./styles/output.css" rel="stylesheet">
+    <title>ImageDescriber App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles/output.css" rel="stylesheet">
 </head>
 <body class="background-svg-pattern flex justify-center items-center min-h-screen">
-  <div class="text-center max-w-lg">
-    <h1 class="text-3xl font-bold underline align font-family">
-    Please upload an image and I will describe it for you!
-    </h1>
-    <div class="align">
-      <form action="/analyze-image/" method="post" enctype="multipart/form-data" class=" button results-container">
-      <input type="file" id="file" name="file" accept="image/*">
-      <button type="submit" class="button-style">Upload</button>
+    <div class="text-center max-w-lg">
+        <h1 class="text-3xl font-bold underline align font-family">
+            Please upload an image and I will describe it for you!
+        </h1>
+        <div class="align">
+            <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">
+                <input type="file" id="file" name="file" accept="image/*">
+                <button type="submit" class="button-style">Upload</button>
+            </form>
+            <!-- Loader Element -->
+            <div class="loader" id="loader"></div>
+        </div>
+        <a href="/history/" class="font-family text-blue-600 mt-6 inline-block">View history</a>
     </div>
-    <a href="/history/" class="font-family text-blue-600 mt-6 inline-block">View history</a>
-    </form>
-  </div>
+
+    <script>
+        // JavaScript to show loader on form submit
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            document.getElementById('loader').style.display = 'block'; // Show loader
+        });
+    </script>
 </body>
 </html>
