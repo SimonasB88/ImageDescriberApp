@@ -81,6 +81,7 @@ async def show_history(request: Request):
             "results": record["results"],
             "timestamp": record["timestamp"]
         })
+    return templates.TemplateResponse("history.html", {"request": request, "results": results})
 
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
