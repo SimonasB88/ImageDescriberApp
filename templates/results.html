@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./styles/output.css" rel="stylesheet">
+    <link href="../styles/output.css" rel="stylesheet">
+    <title>Image Analysis Results</title>
 </head>
-<body class="background-svg-pattern">
-    <h1 class="text-3xl font-bold underline align font-family">
-        Thank you for uploading the image!
-    </h1>
-    <p class="align">
-        Here are the results:
-        <!-- Add your code to display the results here -->
-    </p>
+<body class="background-svg-pattern flex justify-center items-center min-h-screen">
+    <div class="text-center max-w-lg">
+        <h1 class="text-3xl font-bold underline font-family mb-4">
+            Thank you for uploading the image!
+        </h1>
+        <p class="font-family mb-6">
+            Here is the image description:
+        </p>
+
+        <!-- Display the results here -->
+        <div class="results-container">
+            {% if labels %}
+                <ul>
+                    {% for label in labels %}
+                        <li class="mb-2">
+                            <strong>Description:</strong> {{ label.description }} <br>
+                            <strong>Confidence Score:</strong> {{ label.score | round(2) }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No labels detected in the image.</p>
+            {% endif %}
+        </div>
+
+        <a href="/" class="font-family text-blue-600 mt-6 inline-block">Go back to upload another image</a>
+    </div>
 </body>
 </html>

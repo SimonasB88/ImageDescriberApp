@@ -38,3 +38,59 @@
 .background-svg-pattern {
     background-image: linear-gradient(to right, #470055, #00486a);
 }
+.results-container {
+    background-color: #ebf8ff; /* Light blue background */
+    border: 1px solid #90cdf4; /* Slightly darker blue border */
+    border-radius: 0.5rem; /* Rounded corners */
+    padding: 1rem; /* Padding inside the box */
+    text-align: left; /* Left-aligned text */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.flex {
+    display: flex;
+}
+
+.justify-center {
+    justify-content: center;
+}
+
+.items-center {
+    align-items: center;
+}
+
+.min-h-screen {
+    min-height: 100vh; /* Full height of the screen */
+}
+
+.text-center {
+    text-align: center;
+}
+
+.max-w-lg {
+    max-width: 1024px; /* Limits the max width of the container */
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.text-blue-600 {
+    color: #3182ce; /* Link color */
+}
+
+.font-family {
+    font-family: Arial, sans-serif; /* Update with your preferred font */
+}
