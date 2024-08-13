@@ -20,10 +20,10 @@
             {% if labels %}
                 <ul>
                     {% for label in labels %}
-                        <li class="mb-2">
+                        <p class="mb-2">
                             <strong>Keyword:</strong> {{ label.description }} <br>
                             <strong>Confidence Score:</strong> {{ label.score | round(2) }}
-                        </li>
+                        </p>
                     {% endfor %}
                 </ul>
             {% else %}
