@@ -12,16 +12,16 @@
             Thank you for uploading the image!
         </h1>
         <p class="font-family mb-6">
-            Here is the image description:
+            Here is the image description from Google:
         </p>
 
         <!-- Display the results here -->
-        <div class="results-container">
+        <div class="results-container font-family">
             {% if labels %}
                 <ul>
                     {% for label in labels %}
                         <li class="mb-2">
-                            <strong>Description:</strong> {{ label.description }} <br>
+                            <strong>Keyword:</strong> {{ label.description }} <br>
                             <strong>Confidence Score:</strong> {{ label.score | round(2) }}
                         </li>
                     {% endfor %}

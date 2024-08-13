@@ -39,12 +39,12 @@
     background-image: linear-gradient(to right, #470055, #00486a);
 }
 .results-container {
-    background-color: #ebf8ff; /* Light blue background */
-    border: 1px solid #90cdf4; /* Slightly darker blue border */
-    border-radius: 0.5rem; /* Rounded corners */
-    padding: 1rem; /* Padding inside the box */
-    text-align: left; /* Left-aligned text */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #91a8d416; 
+    border: 1px solid #90cdf4; 
+    border-radius: 0.5rem; 
+    padding: 1rem; 
+    text-align: left; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .flex {
