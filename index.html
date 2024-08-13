@@ -6,14 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="./styles/output.css" rel="stylesheet">
 </head>
-<body class="background-svg-pattern">
-  <h1 class="text-3xl font-bold underline align font-family">
-  Please upload an image and I will describe it for you!
-  </h1>
-  <div class="align">
-  <form action="/analyze-image/" method="post" enctype="multipart/form-data" class=" button results-container">
+<body class="background-svg-pattern flex justify-center items-center min-h-screen">
+  <div class="text-center max-w-lg">
+    <h1 class="text-3xl font-bold underline align font-family">
+    Please upload an image and I will describe it for you!
+    </h1>
+    <div class="align">
+    <form action="/analyze-image/" method="post" enctype="multipart/form-data" class=" button results-container">
     <input type="file" id="file" name="file" accept="image/*">
     <button type="submit" class="button-style">Upload</button>
-  </form>
+    </form>
+  </div>
 </body>
 </html>
