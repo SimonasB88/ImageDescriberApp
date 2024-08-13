@@ -1,6 +1,7 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates  # Add this import
 from google.cloud import vision
 from google.oauth2 import service_account
 from pymongo import MongoClient
@@ -11,7 +12,10 @@ import os
 app = FastAPI()
 
 # Mount the static files directory
-app.mount("/styles", StaticFiles(directory="styles"), name="output.css")
+app.mount("/styles", StaticFiles(directory="styles"), name="styles")
+
+# Initialize Jinja2 templates directory
+templates = Jinja2Templates(directory="templates")  # Add this line
 
 # Function to read the index.html file
 def read_index_html():
@@ -32,7 +36,7 @@ async def serve_index_html():
 
 # Function to analyze the image and store the results in MongoDB
 @app.post("/analyze-image/")
-async def analyze_image(file: UploadFile = File(...)):
+async def analyze_image(request: Request, file: UploadFile = File(...)):
     # Read the image file
     image_content = await file.read()
     
@@ -40,7 +44,10 @@ async def analyze_image(file: UploadFile = File(...)):
     image = vision.Image(content=image_content)
 
     # Call the Vision API
-    response = client.label_detection(image=image)
+    try:
+        response = client.label_detection(image=image)
+    except Exception as e:
+        return HTMLResponse(content=f"Error calling Vision API: {str(e)}", status_code=500)
 
     # Extract labels and their descriptions
     labels = response.label_annotations
@@ -54,13 +61,16 @@ async def analyze_image(file: UploadFile = File(...)):
     }
 
     # Insert the data into MongoDB
-    collection.insert_one(query_data)
+    try:
+        collection.insert_one(query_data)
+    except Exception as e:
+        return HTMLResponse(content=f"Error inserting into MongoDB: {str(e)}", status_code=500)
 
-    return {"labels": results}
+    # Render the results template with the labels
+    return templates.TemplateResponse("results.html", {"request": request, "labels": results})
 
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
-
 db = mongo_client["vision_api_history"]
 collection = db["vision_api_history_collection"]
 
