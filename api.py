@@ -69,6 +69,19 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
     # Render the results template with the labels
     return templates.TemplateResponse("results.html", {"request": request, "labels": results})
 
+# History page to show the results stored in MongoDB
+@app.get("/history/")
+async def show_history(request: Request):
+    # Fetch all the records from MongoDB
+    records = collection.find({})
+    results = []
+    for record in records:
+        results.append({    
+            "file_name": record["file_name"],
+            "results": record["results"],
+            "timestamp": record["timestamp"]
+        })
+
 # Initialize MongoDB client
 mongo_client = MongoClient('mongodb://localhost:27017/')
 db = mongo_client["vision_api_history"]
