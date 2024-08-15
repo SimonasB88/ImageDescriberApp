@@ -14,3 +14,15 @@ starlette==0.37.2
 typing_extensions==4.12.2
 uvicorn==0.15.0
 fastapi==0.112.0
+google-auth==2.6.0
+google-auth-oauthlib==0.6.0
+google-auth-httplib2==0.1.0
+google-api-python-client==2.24.0
+google-auth==2.6.0
+google-auth-httplib2==0.1.0
+google-auth-oauthlib==0.6.0
+google-cloud-core==2.2.1
+google-cloud-storage==1.45.0
+google-cloud-vision==2.0.0
+google-vision==2.0.0
+
