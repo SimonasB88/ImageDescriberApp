@@ -97,9 +97,21 @@ mongo_client = MongoClient(MONGO_URL)
 db = mongo_client["vision_api_history"]
 collection = db["vision_api_history_collection"]
 
-# Load the service account key file and initialize the Vision client
-GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
-credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
+# Construct the credentials from environment variables
+credentials_info = {
+    "type": os.getenv("TYPE"),
+    "project_id": os.getenv("PROJECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),  # Replace escaped \n with actual newlines
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "client_id": os.getenv("CLIENT_ID"),
+    "auth_uri": os.getenv("AUTH_URI"),
+    "token_uri": os.getenv("TOKEN_URI"),
+    "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+    "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL")
+}
+
+credentials = service_account.Credentials.from_service_account_info(credentials_info)
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
 if __name__ == "__main__":
