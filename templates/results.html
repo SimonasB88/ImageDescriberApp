@@ -21,7 +21,7 @@
                 <ul>
                     {% for label in labels %}
                         <p class="mb-2">
-                            <strong>Keyword:</strong> {{ label.description }} <br>
+                            {{ label.description }} <br>
                             <strong>Confidence Score:</strong> {{ label.score | round(2) }}
                         </p>
                     {% endfor %}
