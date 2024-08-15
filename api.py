@@ -5,8 +5,11 @@ from fastapi.templating import Jinja2Templates  # Add this import
 from google.cloud import vision
 from google.oauth2 import service_account
 from pymongo import MongoClient
+from dotenv import load_dotenv
 import datetime
 import os
+
+load_dotenv()
 
 # Initialize FastAPI app
 app = FastAPI()
@@ -88,11 +91,14 @@ async def show_history(request: Request):
 
 
 # Initialize MongoDB client
-mongo_client = MongoClient('mongodb://localhost:27017/')
+MONGO_URL = os.getenv("MONGO_URL")
+
+mongo_client = MongoClient(MONGO_URL)
 db = mongo_client["vision_api_history"]
 collection = db["vision_api_history_collection"]
 
 # Load the service account key file and initialize the Vision client
+GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
 credentials = service_account.Credentials.from_service_account_file('responsive-amp-431818-n3-76277e347b39.json')
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
