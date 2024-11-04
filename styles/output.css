@@ -36,6 +36,10 @@
     margin: 4px 2px;
     cursor: pointer;
 }
+.button-style:hover {
+    background-color: #0a5d7b;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
+}
 .background-svg-pattern {
     background-image: linear-gradient(to right, #470055, #00486a);
 }
