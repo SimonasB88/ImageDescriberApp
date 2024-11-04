@@ -15,12 +15,13 @@
         <div class="align">
             <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">
                 <input type="file" id="file" name="file" accept="image/*">
+                <label for="file" class="btn btn-primary custom-file-upload btn btn-dark">Browse...</label>
                 <button type="submit" class="btn btn-primary">Upload</button>
             </form>
             <!-- Loader Element -->
             <div class="loader" id="loader"></div>
         </div>
-        <a href="/history/" class="font-family text-blue-600 mt-6 inline-block">View history</a>
+        <a href="/history/" class="btn btn-link">View history</a>
     </div>
 
     <script src="/static/js/bootstrap.bundle.min.js"></script>

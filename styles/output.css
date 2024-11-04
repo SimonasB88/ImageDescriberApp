@@ -47,7 +47,7 @@
     background-color: #91a8d416; 
     border: 1px solid #90cdf4; 
     border-radius: 0.5rem; 
-    padding: 1rem; 
+    padding: 5rem; 
     text-align: left; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -109,6 +109,16 @@
     animation: spin 1s linear infinite;
     display: none; /* Hide loader initially */
     margin: 20px auto;
+}
+
+/* Hide the real file input */
+input[type="file"] {
+    display: none;
+}
+/* Style the label as a Bootstrap button */
+.custom-file-upload {
+    display: inline-block;
+    cursor: pointer;
 }
 
 @keyframes spin {
