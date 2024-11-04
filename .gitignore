@@ -4,3 +4,4 @@ responsive-amp**
 /images
 /venv
 .env
+/node_modules
