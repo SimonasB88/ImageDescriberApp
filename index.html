@@ -4,6 +4,7 @@
     <title>ImageDescriber App</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link href="./styles/output.css" rel="stylesheet">
 </head>
 <body class="background-svg-pattern flex justify-center items-center min-h-screen">
@@ -14,7 +15,7 @@
         <div class="align">
             <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">
                 <input type="file" id="file" name="file" accept="image/*">
-                <button type="submit" class="button-style">Upload</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
             </form>
             <!-- Loader Element -->
             <div class="loader" id="loader"></div>
@@ -22,6 +23,7 @@
         <a href="/history/" class="font-family text-blue-600 mt-6 inline-block">View history</a>
     </div>
 
+    <script src="/static/js/bootstrap.bundle.min.js"></script>
     <script>
         // JavaScript to show loader on form submit
         document.getElementById('uploadForm').addEventListener('submit', function() {

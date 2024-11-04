@@ -15,6 +15,9 @@ load_dotenv()
 app = FastAPI()
 
 # Mount the static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Mount the static files directory
 app.mount("/styles", StaticFiles(directory="styles"), name="styles")
 
 # Initialize Jinja2 templates directory
