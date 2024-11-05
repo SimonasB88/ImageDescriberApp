@@ -8,6 +8,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import datetime
 import os
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
