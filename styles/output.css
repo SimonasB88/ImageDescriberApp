@@ -48,8 +48,9 @@
     border: 1px solid #90cdf4; 
     border-radius: 0.5rem; 
     padding: 5rem; 
-    text-align: left; 
+    text-align: center; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    align-items: center;
 }
 
 .flex {
@@ -86,6 +87,10 @@
 
 .mb-2 {
     margin-bottom: 0.5rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
 }
 
 .inline-block {

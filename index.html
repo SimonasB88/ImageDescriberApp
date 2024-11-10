@@ -15,8 +15,24 @@
         <div class="align">
             <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">
                 <input type="file" id="file" name="file" accept="image/*">
+                <div id="fileName" class="mt-2"></div>
                 <label for="file" class="btn btn-primary custom-file-upload btn btn-dark">Browse...</label>
                 <button type="submit" class="btn btn-primary">Upload</button>
+            <script>
+                document.getElementById('file').addEventListener('change', function() {
+                    const uploadButton = document.querySelector('button[type="submit"]');
+                    const fileNameDiv = document.getElementById('fileName');
+                    if (this.files.length > 0) {
+                        uploadButton.disabled = false;
+                        fileNameDiv.textContent = `Selected file: ${this.files[0].name}`;
+                    } else {
+                        uploadButton.disabled = true;
+                        fileNameDiv.textContent = '';
+                    }
+                });
+                // Initially disable the upload button
+                document.querySelector('button[type="submit"]').disabled = true;
+            </script>
             </form>
             <!-- Loader Element -->
             <div class="loader" id="loader"></div>
