@@ -5,3 +5,4 @@ responsive-amp**
 /venv
 .env
 /node_modules
+/newenv
