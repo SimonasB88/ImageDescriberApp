@@ -126,14 +126,9 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.login-container {
+.flex-right {
     display: flex;
-    flex-wrap: wrap;
-    background-color: #002663;
-    border: 1px solid #eaeaea;
-    border-radius: 0.5rem;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    justify-content: flex-end;
 }
 
 @keyframes spin {
