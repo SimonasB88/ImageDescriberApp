@@ -70,6 +70,10 @@ async def serve_index_html():
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get("/register/", response_class=HTMLResponse)
+async def register(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
 @app.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...)):
     try:

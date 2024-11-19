@@ -7,38 +7,53 @@
     <link href="../styles/output.css" rel="stylesheet">
     <title>Image Analysis Results</title>
 </head>
-<body class="background-svg-pattern flex justify-center items-center min-h-screen">
-    <div class="text-center max-w-lg">
-        <h1 class="text-3xl font-bold underline font-family mb-4">
-            History
-        </h1>
-        <p class="font-family mb-6">
-            Here is the image description with keyword objects history:
-        </p>
+<body>
+    <div class="background-svg-pattern font-family flex-right">
+        <table class="background-svg-pattern flex justify-center items-center min-h-screene">
+            <tr>
+                <a href="/">Home</a>
+            </tr>
+            <tr>
+                <a href="/login/">Login</a>
+            </tr>
+            <tr>
+                <a href="/register/">Register</a>
+            </tr>
+        </table>
+    </div>
+    <div class="background-svg-pattern flex justify-center items-center min-h-screen">
+        <div class="text-center max-w-lg">
+            <h1 class="text-3xl font-bold underline font-family mb-4">
+                History
+            </h1>
+            <p class="font-family mb-6">
+                Here is the image description with keyword objects history:
+            </p>
 
-        <!-- Display the results here -->
-        <div class="results-container font-family">
-            {% if results %}
-                <ul class="space-y-6">
-                    {% for result in results %}
-                        <li class="p-4 border-b border-gray-200">
-                            <strong>File Name:</strong> {{ result.file_name }} <br>
-                            <strong>Timestamp:</strong> {{ result.timestamp }} <br>
-                            <strong>Results:</strong>
-                            <ul class="list-disc pl-5 mt-2">
-                                {% for label in result.results %}
-                                    <li>{{ label.description }} (Confidence: {{ label.score | round(2) }})</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No history records found.</p>
-            {% endif %}
+            <!-- Display the results here -->
+            <div class="results-container font-family">
+                {% if results %}
+                    <ul class="space-y-6">
+                        {% for result in results %}
+                            <li class="p-4 border-b border-gray-200">
+                                <strong>File Name:</strong> {{ result.file_name }} <br>
+                                <strong>Timestamp:</strong> {{ result.timestamp }} <br>
+                                <strong>Results:</strong>
+                                <ul class="list-disc pl-5 mt-2">
+                                    {% for label in result.results %}
+                                        <li>{{ label.description }} (Confidence: {{ label.score | round(2) }})</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No history records found.</p>
+                {% endif %}
+            </div>
+
+            <a href="/" class="btn btn-link">Go back to upload another image</a>
         </div>
-
-        <a href="/" class="btn btn-link">Go back to upload another image</a>
     </div>
 </body>
 </html>
