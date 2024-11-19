@@ -66,6 +66,10 @@ async def read_root():
 async def serve_index_html():
     return HTMLResponse(content=read_index_html(), status_code=200)
 
+@app.get("/login/", response_class=HTMLResponse)
+async def login(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
 @app.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...)):
     try:

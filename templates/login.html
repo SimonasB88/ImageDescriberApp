@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImageDescriber App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link href="./styles/output.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-svg-pattern flex justify-center items-center min-h-screen">
+        <h1 class="text-3xl font-bold underline align font-family">
+            Please type your username and password to login.
+        </h1>
+        <div class="text-center max-w-lg">
+            <form action="/login/" method="post" class="button results-container">
+                <div class="form-group mt-2">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" class="form-control" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>      
+    </div>
+</body>
+</html>
