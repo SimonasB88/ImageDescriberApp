@@ -74,6 +74,25 @@ async def login(request: Request):
 async def register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
+@app.post("/register-completing/")
+async def handle_register(request: Request):
+    form = await request.form()
+    username = form.get("username")
+    password = form.get("password")
+
+    if not username or not password:
+        raise HTTPException(status_code=400, detail="Username and password are required.")
+
+    # Check if the user already exists in the database
+    user = collection.find_one({"username": username})
+    if user:
+        raise HTTPException(status_code=400, detail="User already exists in the database.")
+    else:
+        # Insert the new user into the new collection
+        new_user_collection = db["users"]
+        new_user_collection.insert_one({"username": username, "password": password})
+        return templates.TemplateResponse("login.html", {"request": request})
+
 @app.post("/login-processing/")
 async def handle_login(request: Request):
     form = await request.form()
