@@ -26,6 +26,12 @@
             <h1 class="text-3xl font-bold underline align font-family">
                 Please type your username and password to login.
             </h1>
+            {% if message %}
+                <p style="color: green;">{{ message }}</p>
+            {% endif %}
+            {% if error %}
+                <p style="color: red;">{{ error }}</p>
+            {% endif %}
             <div class="text-center max-w-lg">
                 <form action="/login-success/" method="post" class="button results-container">
                     <div class="form-group mt-2">

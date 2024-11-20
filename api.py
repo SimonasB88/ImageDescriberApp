@@ -94,21 +94,30 @@ async def handle_register(request: Request):
         new_user_collection.insert_one({"username": username, "password": password})
         return templates.TemplateResponse("login.html", {"request": request, "success": "Thank you for registration, you may login!"})
 
-@app.post("/login-success/")
+@app.post("/login-success/", response_class=HTMLResponse)
 async def handle_login(request: Request):
     form = await request.form()
     username = form.get("username")
     password = form.get("password")
 
     if not username or not password:
-        raise HTTPException(status_code=400, detail="Username and password are required.")
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "error": "Username and password are required."}
+        )
 
-    # Check if the user exists in the database
     user = db["users"].find_one({"username": username, "password": password})
     if user:
-        return templates.TemplateResponse("index.html", {"request": request, "message": f"Welcome, {username}"})
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "message": f"Successfully logged in {username}!"}
+        )
     else:
-        raise HTTPException(status_code=401, detail="Invalid username or password.")
+        return templates.TemplateResponse(
+            "login.html",
+            {"request": request, "error": "Invalid username or password."}
+        )
+
 
 @app.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...)):
