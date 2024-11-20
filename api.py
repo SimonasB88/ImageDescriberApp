@@ -81,9 +81,10 @@ async def handle_register(request: Request):
     password = form.get("password")
 
     if not username or not password:
-        # TODO
-        raise HTTPException(status_code=400, detail="Username and password are required.")
-
+        return templates.TemplateResponse(
+            "register.html",
+            {"request": request, "error": "Username and password are required."}
+        )
     # Check if the user already exists in the database
     user = db["users"].find_one({"username": username})
     if user:
@@ -92,7 +93,7 @@ async def handle_register(request: Request):
         # Insert the new user into the new collection
         new_user_collection = db["users"]
         new_user_collection.insert_one({"username": username, "password": password})
-        return templates.TemplateResponse("login.html", {"request": request, "success": "Thank you for registration, you may login!"})
+        return templates.TemplateResponse("login.html", {"request": request, "message": "Thank you for registration, you may login!"})
 
 @app.post("/login-success/", response_class=HTMLResponse)
 async def handle_login(request: Request):
