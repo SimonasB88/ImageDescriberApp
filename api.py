@@ -27,7 +27,7 @@ templates = Jinja2Templates(directory="templates")
 # Initialize MongoDB client
 MONGO_URL = os.getenv("MONGO_URL")
 mongo_client = MongoClient(MONGO_URL)
-db = mongo_client["vision_api_history"]
+db = mongo_client["image_describer_db"]
 collection = db["vision_api_history_collection"]
 
 # Construct the credentials for Google Vision API from environment variables
@@ -81,19 +81,20 @@ async def handle_register(request: Request):
     password = form.get("password")
 
     if not username or not password:
+        # TODO
         raise HTTPException(status_code=400, detail="Username and password are required.")
 
     # Check if the user already exists in the database
-    user = collection.find_one({"username": username})
+    user = db["users"].find_one({"username": username})
     if user:
-        raise HTTPException(status_code=400, detail="User already exists in the database.")
+        return templates.TemplateResponse("register.html", {"request": request, "error": "User already exists in the database."})
     else:
         # Insert the new user into the new collection
         new_user_collection = db["users"]
         new_user_collection.insert_one({"username": username, "password": password})
-        return templates.TemplateResponse("login.html", {"request": request})
+        return templates.TemplateResponse("login.html", {"request": request, "success": "Thank you for registration, you may login!"})
 
-@app.post("/login-processing/")
+@app.post("/login-success/")
 async def handle_login(request: Request):
     form = await request.form()
     username = form.get("username")
@@ -103,9 +104,9 @@ async def handle_login(request: Request):
         raise HTTPException(status_code=400, detail="Username and password are required.")
 
     # Check if the user exists in the database
-    user = collection.find_one({"username": username, "password": password})
+    user = db["users"].find_one({"username": username, "password": password})
     if user:
-        return templates.TemplateResponse("welcome.html", {"request": request, "username": username})
+        return templates.TemplateResponse("index.html", {"request": request, "message": f"Welcome, {username}"})
     else:
         raise HTTPException(status_code=401, detail="Invalid username or password.")
 
