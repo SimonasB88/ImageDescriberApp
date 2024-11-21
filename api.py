@@ -142,7 +142,8 @@ async def handle_register(request: Request):
     else:
         # Insert the new user into the new collection
         new_user_collection = db["users"]
-        new_user_collection.insert_one({"username": username, "password": password})
+        hashed_password = get_password_hash(password)
+        new_user_collection.insert_one({"username": username, "hashed_password": hashed_password})
         return templates.TemplateResponse("login.html", {"request": request, "message": "Thank you for registration, you may login!"})
 
 @app.post("/login-success/", response_class=HTMLResponse)
@@ -157,17 +158,36 @@ async def handle_login(request: Request):
             {"request": request, "error": "Username and password are required."}
         )
 
-    user = db["users"].find_one({"username": username, "password": password})
-    if user:
+    user = db["users"].find_one({"username": username})
+    if user and verify_password(password, user["hashed_password"]):
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": username}, expires_delta=access_token_expires
+        )
         return templates.TemplateResponse(
             "login.html",
-            {"request": request, "message": f"Successfully logged in {username}!"}
+            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
         )
     else:
         return templates.TemplateResponse(
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
+        
+@app.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = db["users"].find_one({"username": form_data.username})
+    if not user or not verify_password(form_data.password, user["hashed_password"]):
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user["username"]}, expires_delta=access_token_expires
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @app.post("/analyze-image/")
