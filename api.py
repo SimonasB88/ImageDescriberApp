@@ -191,7 +191,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 
 
 @app.post("/analyze-image/")
-async def analyze_image(request: Request, file: UploadFile = File(...)):
+async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     try:
         # Check file size limit (e.g., 10MB)
         max_size = 10 * 1024 * 1024  # 10MB
@@ -230,7 +230,7 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
         return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
 
 @app.get("/history/")
-async def show_history(request: Request):
+async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
     try:
         # Fetch all records from MongoDB
         records = collection.find({})
