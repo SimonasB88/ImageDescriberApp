@@ -173,7 +173,7 @@ async def handle_login(request: Request):
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
-        
+
 @app.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
     user = db["users"].find_one({"username": form_data.username})
@@ -188,7 +188,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         data={"sub": user["username"]}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
-
 
 @app.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
@@ -215,7 +214,8 @@ async def analyze_image(request: Request, file: UploadFile = File(...), current_
         query_data = {
             "file_name": file.filename,
             "results": results,
-            "timestamp": datetime.datetime.now()
+            "timestamp": datetime.datetime.now(),
+            "user_id": current_user["_id"]  # Record the user who performed the analysis
         }
         
         # Insert the data into MongoDB
@@ -232,8 +232,8 @@ async def analyze_image(request: Request, file: UploadFile = File(...), current_
 @app.get("/history/")
 async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
     try:
-        # Fetch all records from MongoDB
-        records = collection.find({})
+        # Fetch records for the current user from MongoDB
+        records = collection.find({"user_id": current_user["_id"]})
         results = [
             {
                 "file_name": record["file_name"],
