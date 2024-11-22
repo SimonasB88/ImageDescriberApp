@@ -56,7 +56,7 @@ credentials = service_account.Credentials.from_service_account_info(credentials_
 client = vision.ImageAnnotatorClient(credentials=credentials)
 
 # JWT and password hashing setup
-SECRET_KEY = "your_secret_key"
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
