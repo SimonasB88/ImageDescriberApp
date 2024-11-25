@@ -10,17 +10,12 @@
 </head>
 <body>
     <div class="background-svg-pattern font-family flex-right">
-        <table class="background-svg-pattern flex justify-center items-center min-h-screene">
-            <tr>
-                <a href="/login/">Login</a>
-            </tr>
-            <tr>
-                <a href="/register/">Register</a>
-            </tr>
-        </table>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
+            {% if message %}
+            <p style="color: green;">{{ message }}</p>
+            {% endif %}
             <h1 class="text-3xl font-bold underline align font-family">
                 Please upload an image and I will describe it for you!
             </h1>
