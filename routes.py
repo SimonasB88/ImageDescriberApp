@@ -12,8 +12,12 @@ from models import find_user, add_user, verify_password, history_collection, db
 from dotenv import load_dotenv
 import os
 import logging
+import datetime
 
 load_dotenv()
+
+# Define the token expiration time in minutes
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Setup logging for better debugging
 logging.basicConfig(level=logging.DEBUG)
