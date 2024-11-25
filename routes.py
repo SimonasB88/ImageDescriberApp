@@ -1,4 +1,3 @@
-# routes.py
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -7,7 +6,7 @@ from google.cloud import vision
 from google.oauth2 import service_account
 from pydantic import BaseModel
 from datetime import timedelta
-from auth import create_access_token, verify_token
+from auth import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from models import find_user, add_user, verify_password, history_collection, db
 from dotenv import load_dotenv
 import os
@@ -15,9 +14,6 @@ import logging
 import datetime
 
 load_dotenv()
-
-# Define the token expiration time in minutes
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 # Setup logging for better debugging
 logging.basicConfig(level=logging.DEBUG)
