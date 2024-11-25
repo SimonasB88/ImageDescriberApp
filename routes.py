@@ -168,6 +168,12 @@ async def show_history(request: Request, current_user: dict = Depends(get_curren
     except Exception as e:
         logging.error(f"Error fetching history: {str(e)}")
         return HTMLResponse(content=f"Error fetching history: {str(e)}", status_code=500)
+    
+@router.get("/logout/")
+async def logout(request: Request):
+    response = RedirectResponse(url="/")
+    response.delete_cookie("Authorization")
+    return response
 
 def read_index_html():
     file_path = os.path.join(os.path.dirname(__file__), "index.html")
