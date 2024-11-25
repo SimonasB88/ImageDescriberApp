@@ -93,7 +93,7 @@ async def handle_register(request: Request):
         add_user({"username": username, "password": password})
         return templates.TemplateResponse("login.html", {"request": request, "message": "Thank you for registration, you may login!"})
 
-@router.post("/login-success/", response_class=HTMLResponse)
+@router.post("/token", response_class=HTMLResponse)
 async def handle_login(request: Request):
     form = await request.form()
     username = form.get("username")
@@ -121,20 +121,20 @@ async def handle_login(request: Request):
             {"request": request, "error": "Invalid username or password."}
         )
 
-@router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = find_user(form_data.username)
-    if not user or not verify_password(form_data.password, user["hashed_password"]):
-        raise HTTPException(
-            status_code=401,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user["username"]}, expires_delta=access_token_expires
-    )
-    return {"access_token": access_token, "token_type": "bearer"}
+# @router.post("/token", response_model=Token)
+# async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+#     user = find_user(form_data.username)
+#     if not user or not verify_password(form_data.password, user["hashed_password"]):
+#         raise HTTPException(
+#             status_code=401,
+#             detail="Incorrect username or password",
+#             headers={"WWW-Authenticate": "Bearer"},
+#         )
+#     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+#     access_token = create_access_token(
+#         data={"sub": user["username"]}, expires_delta=access_token_expires
+#     )
+#     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
