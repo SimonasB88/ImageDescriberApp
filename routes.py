@@ -13,6 +13,7 @@ import os
 import logging
 import datetime
 from fastapi.responses import RedirectResponse
+from fastapi.responses import JSONResponse
 
 load_dotenv()
 
@@ -117,27 +118,6 @@ async def handle_login(request: Request):
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
-        
-@router.post("/token", response_model=Token)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = find_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=401,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    response = RedirectResponse(url="/protected", status_code=303)
-    response.set_cookie(key="Authorization", value=f"Bearer {access_token}", httponly=True)
-    return response
-
-@router.get("/protected", response_class=HTMLResponse)
-async def read_protected(request: Request, current_user: dict = Depends(get_current_user)):
-    return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
 
 @router.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
