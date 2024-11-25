@@ -7,11 +7,12 @@ from google.oauth2 import service_account
 from pydantic import BaseModel
 from datetime import timedelta
 from auth import create_access_token, verify_token, ACCESS_TOKEN_EXPIRE_MINUTES
-from models import find_user, add_user, verify_password, history_collection, db
+from models import find_user, add_user, verify_password, history_collection, find_user, verify_password
 from dotenv import load_dotenv
 import os
 import logging
 import datetime
+from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
@@ -60,12 +61,8 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     return user
 
 @router.get("/", response_class=HTMLResponse)
-async def read_root():
-    return HTMLResponse(content=read_index_html(), status_code=200)
-
-@router.get("/index.html", response_class=HTMLResponse)
-async def serve_index_html():
-    return HTMLResponse(content=read_index_html(), status_code=200)
+async def root(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
 @router.get("/login/", response_class=HTMLResponse)
 async def login(request: Request):
@@ -120,21 +117,27 @@ async def handle_login(request: Request):
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
+        
+@router.post("/token", response_model=Token)
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = find_user(form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.username}, expires_delta=access_token_expires
+    )
+    response = RedirectResponse(url="/protected", status_code=303)
+    response.set_cookie(key="Authorization", value=f"Bearer {access_token}", httponly=True)
+    return response
 
-# @router.post("/token", response_model=Token)
-# async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-#     user = find_user(form_data.username)
-#     if not user or not verify_password(form_data.password, user["hashed_password"]):
-#         raise HTTPException(
-#             status_code=401,
-#             detail="Incorrect username or password",
-#             headers={"WWW-Authenticate": "Bearer"},
-#         )
-#     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-#     access_token = create_access_token(
-#         data={"sub": user["username"]}, expires_delta=access_token_expires
-#     )
-#     return {"access_token": access_token, "token_type": "bearer"}
+@router.get("/protected", response_class=HTMLResponse)
+async def read_protected(request: Request, current_user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("index.html", {"request": request, "user": current_user})
 
 @router.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
