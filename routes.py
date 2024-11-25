@@ -110,7 +110,7 @@ async def handle_login(request: Request):
             data={"sub": username}, expires_delta=access_token_expires
         )
         return templates.TemplateResponse(
-            "login.html",
+            "index.html",
             {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
         )
     else:
