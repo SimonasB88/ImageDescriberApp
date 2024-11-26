@@ -6,3 +6,5 @@ responsive-amp**
 .env
 /node_modules
 /newenv
+/app/venv
+/app/__pycache__
