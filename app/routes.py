@@ -91,7 +91,7 @@ async def handle_register(request: Request):
         add_user({"username": username, "password": password})
         return templates.TemplateResponse("login.html", {"request": request, "message": "Thank you for registration, you may login!"})
 
-@router.post("/token", response_class=HTMLResponse)
+@router.post("/authenticate", response_class=HTMLResponse)
 async def handle_login(request: Request):
     form = await request.form()
     username = form.get("username")
@@ -109,11 +109,9 @@ async def handle_login(request: Request):
         access_token = create_access_token(
             data={"sub": username}, expires_delta=access_token_expires
         )
-        response = JSONResponse(
-            content={
-                "message": f"Successfully logged in {username}!",
-                "token": access_token
-            }
+        response = templates.TemplateResponse(
+            "index.html",
+            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
         )
         response.headers["Authorization"] = f"Bearer {access_token}"
         response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
