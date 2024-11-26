@@ -109,15 +109,21 @@ async def handle_login(request: Request):
         access_token = create_access_token(
             data={"sub": username}, expires_delta=access_token_expires
         )
-        return templates.TemplateResponse(
-            "index.html",
-            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
+        response = JSONResponse(
+            content={
+                "message": f"Successfully logged in {username}!",
+                "token": access_token
+            }
         )
+        response.headers["Authorization"] = f"Bearer {access_token}"
+        response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
+        return response
     else:
         return templates.TemplateResponse(
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
+
 
 @router.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
