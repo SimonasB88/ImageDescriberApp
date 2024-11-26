@@ -111,7 +111,7 @@ async def handle_login(request: Request):
         )
         response = templates.TemplateResponse(
             "index.html",
-            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
+            {"request": request, "message": f"Successfully logged in {username}!"}
         )
         response.headers["Authorization"] = f"Bearer {access_token}"
         response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
