@@ -16,6 +16,11 @@
             <tr>
                 <a href="/register/">Register</a>
             </tr>
+            {% if user %}
+            <tr>
+                <a href="/history/">History</a>
+            </tr>
+            {% endif %}
         </table>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">

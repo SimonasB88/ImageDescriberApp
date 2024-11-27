@@ -7,7 +7,15 @@
     <link href="../styles/output.css" rel="stylesheet">
     <title>Image Analysis Results</title>
 </head>
-<body class="background-svg-pattern flex justify-center items-center min-h-screen">
+<body>
+    <div class="background-svg-pattern font-family flex-right">
+        <table class="background-svg-pattern flex justify-center items-center min-h-screene">
+            <tr>
+                <a href="/logout/">Log out</a>
+            </tr>
+        </table>
+    </div>
+<div class="background-svg-pattern flex justify-center items-center min-h-screen">
     <div class="text-center max-w-lg">
         <h1 class="text-3xl font-bold underline font-family mb-4">
             Thank you for uploading the image!
@@ -32,7 +40,7 @@
             {% endif %}
         </div>
 
-        <a href="/" class="btn btn-link">Go back to upload another image</a>
+        <a href="/logout" class="btn btn-link">Go back to upload another image</a>
     </div>
 </body>
 </html>

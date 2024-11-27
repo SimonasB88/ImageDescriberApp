@@ -1,58 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
+    <title>Upload History</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link href="../styles/output.css" rel="stylesheet">
-    <title>Image Analysis Results</title>
 </head>
 <body>
     <div class="background-svg-pattern font-family flex-right">
         <table class="background-svg-pattern flex justify-center items-center min-h-screene">
             <tr>
-                <a href="/">Home</a>
-            </tr>
-            <tr>
-                <a href="/login/">Login</a>
-            </tr>
-            <tr>
-                <a href="/register/">Register</a>
+                <a href="/logout/">Log out</a>
             </tr>
         </table>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
-            <h1 class="text-3xl font-bold underline font-family mb-4">
-                History
-            </h1>
-            <p class="font-family mb-6">
-                Here is the image description with keyword objects history:
-            </p>
-
-            <!-- Display the results here -->
-            <div class="results-container font-family">
-                {% if results %}
-                    <ul class="space-y-6">
-                        {% for result in results %}
-                            <li class="p-4 border-b border-gray-200">
-                                <strong>File Name:</strong> {{ result.file_name }} <br>
-                                <strong>Timestamp:</strong> {{ result.timestamp }} <br>
-                                <strong>Results:</strong>
-                                <ul class="list-disc pl-5 mt-2">
-                                    {% for label in result.results %}
-                                        <li>{{ label.description }} (Confidence: {{ label.score | round(2) }})</li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
+            <h1 class="text-3xl font-bold underline align font-family">Upload History</h1>
+            {% if history %}
+                <ul class="list-group">
+                {% for item in history %}
+                    <li class="list-group-item">
+                        <p><strong>File Name:</strong> {{ item.file_name }}</p>
+                        <p><strong>Timestamp:</strong> {{ item.timestamp }}</p>
+                        <p><strong>Results:</strong></p>
+                        <ul>
+                        {% for result in item.results %}
+                            <li>{{ result.description }} ({{ result.score }})</li>
                         {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No history records found.</p>
-                {% endif %}
-            </div>
-
-            <a href="/" class="btn btn-link">Go back to upload another image</a>
+                        </ul>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>No upload history found.</p>
+            {% endif %}
         </div>
     </div>
 </body>
