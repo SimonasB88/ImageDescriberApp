@@ -3,7 +3,7 @@ from routes import router
 from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
-app.mount("/styles", StaticFiles(directory="styles"), name="styles")
+
 app.include_router(router)
 
 if __name__ == "__main__":
