@@ -113,7 +113,7 @@ async def handle_login(request: Request):
         )
         response = templates.TemplateResponse(
             "index.html",
-            {"request": request, "message": f"Successfully logged in {username}!"}
+            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
         )
         response.headers["Authorization"] = f"Bearer {access_token}"
         response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
@@ -124,8 +124,17 @@ async def handle_login(request: Request):
             {"request": request, "error": "Invalid username or password."}
         )
 
-@router.post("/analyze-image/")
-async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
+
+@router.post("/analyze-image/", response_class=HTMLResponse)
+async def analyze_image(request: Request, file: UploadFile = File(...)):
+    form = await request.form()
+    token = form.get("token")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    current_user = await get_current_user(token)
+
     try:
         max_size = 10 * 1024 * 1024  # 10MB
         file_content = await file.read()
@@ -156,7 +165,8 @@ async def analyze_image(request: Request, file: UploadFile = File(...), current_
         logging.error(f"Error analyzing image: {str(e)}")
         return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
 
-@router.get("/history/")
+
+@router.get("/history/", response_class=HTMLResponse)
 async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
