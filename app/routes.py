@@ -13,7 +13,6 @@ import os
 import logging
 import datetime
 from fastapi.responses import RedirectResponse
-from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
@@ -125,7 +124,6 @@ async def handle_login(request: Request):
             {"request": request, "error": "Invalid username or password."}
         )
 
-
 @router.post("/analyze-image/")
 async def analyze_image(request: Request, file: UploadFile = File(...), current_user: dict = Depends(get_current_user)):
     try:
@@ -152,7 +150,7 @@ async def analyze_image(request: Request, file: UploadFile = File(...), current_
         history_collection.insert_one(query_data)
         logging.debug(f"Inserted data into MongoDB: {query_data}")
 
-        return templates.TemplateResponse("results.html", {"request": request, "labels": results})
+        return templates.TemplateResponse("results.html", {"request": request, "labels": results, "user": current_user})
 
     except Exception as e:
         logging.error(f"Error analyzing image: {str(e)}")
