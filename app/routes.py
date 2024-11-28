@@ -23,7 +23,6 @@ logging.basicConfig(level=logging.DEBUG)
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-router.mount("/styles", StaticFiles(directory="styles"), name="styles")
 router.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Construct the credentials for Google Vision API from environment variables

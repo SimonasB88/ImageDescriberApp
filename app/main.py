@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 app.include_router(router)
+app.mount("/styles", StaticFiles(directory="styles"), name="styles")
 
 if __name__ == "__main__":
     import uvicorn
