@@ -123,20 +123,6 @@ async def handle_login(request: Request):
             {"request": request, "error": "Invalid username or password."}
         )
 
-@router.get("/history/", response_class=HTMLResponse)
-async def get_history(request: Request, token: str = Cookie(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    current_user = await get_current_user(token)
-
-    user_id = current_user["_id"]
-    history = history_collection.find({"user_id": user_id})
-    history_items = list(history)
-
-    return templates.TemplateResponse("history.html", {"request": request, "history": history_items, "user": current_user})
-
-
 @router.post("/analyze-image/", response_class=HTMLResponse)
 async def analyze_image(request: Request, file: UploadFile = File(...)):
     form = await request.form()
@@ -179,7 +165,8 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
 
 
 @router.get("/history/", response_class=HTMLResponse)
-async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
+async def show_history(request: Request, token: str = Cookie(None)):
+    current_user = await get_current_user(token)
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
         results = [
