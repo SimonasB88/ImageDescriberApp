@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from dotenv import load_dotenv
 import os
+from fastapi import HTTPException
 
 load_dotenv()
 
@@ -24,7 +25,8 @@ def verify_token(token: str):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise JWTError
+            raise JWTError("Token does not contain a valid username")
         return username
-    except JWTError:
-        return None
+    except JWTError as e:
+        raise HTTPException(status_code=401, detail=str(e))
+

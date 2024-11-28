@@ -54,13 +54,16 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    username = verify_token(token)
-    if not username:
-        raise credentials_exception
-    user = find_user(username)
-    if user is None:
-        raise credentials_exception
-    return user
+    try:
+        username = verify_token(token)
+        if not username:
+            raise credentials_exception
+        user = find_user(username)
+        if user is None:
+            raise credentials_exception
+        return user
+    except HTTPException as e:
+        raise credentials_exception from e
 
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -166,6 +169,9 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
 
 @router.get("/history/", response_class=HTMLResponse)
 async def show_history(request: Request, token: str = Cookie(None)):
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
     current_user = await get_current_user(token)
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
@@ -178,7 +184,6 @@ async def show_history(request: Request, token: str = Cookie(None)):
             for record in records
         ]
         return templates.TemplateResponse("history.html", {"request": request, "results": results})
-
     except Exception as e:
         logging.error(f"Error fetching history: {str(e)}")
         return HTMLResponse(content=f"Error fetching history: {str(e)}", status_code=500)
