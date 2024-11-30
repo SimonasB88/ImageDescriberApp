@@ -54,16 +54,36 @@ async def get_current_user(token: str = Cookie(None)):
     )
     try:
         if not token:
+            logging.debug("No token found in cookie")
             raise credentials_exception
-        token = token.replace("Bearer ", "")  # Remove the Bearer prefix if present
+        
+        logging.debug(f"Raw token from cookie: {token}")
+        
+        if token.startswith("Bearer "):
+            token = token[7:]  # Remove the Bearer prefix
+        else:
+            logging.debug("Token does not start with 'Bearer ' prefix")
+            raise credentials_exception
+
+        logging.debug(f"Token after removing 'Bearer ' prefix: {token}")
+        
         username = verify_token(token)
+        logging.debug(f"Username from token: {username}")
+
         if not username:
+            logging.debug("Token verification failed, no username extracted")
             raise credentials_exception
+
         user = find_user(username)
         if user is None:
+            logging.debug("User not found in database")
             raise credentials_exception
+
+        logging.debug(f"User found: {user}")
         return user
+
     except Exception as e:
+        logging.debug(f"Exception in get_current_user: {str(e)}")
         raise credentials_exception from e
 
 @router.get("/", response_class=HTMLResponse)
@@ -114,6 +134,7 @@ async def handle_login(request: Request):
         access_token = create_access_token(
             data={"sub": username}, expires_delta=access_token_expires
         )
+        logging.debug(f"Generated access token for {username}: {access_token}")
         response = templates.TemplateResponse(
             "index.html",
             {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
@@ -182,6 +203,10 @@ async def show_history(request: Request, current_user: dict = Depends(get_curren
     except Exception as e:
         logging.error(f"Error fetching history: {str(e)}")
         return HTMLResponse(content=f"Error fetching history: {str(e)}", status_code=500)
+
+@router.get("/user-info/", response_class=HTMLResponse)
+async def user_info(request: Request, current_user: dict = Depends(get_current_user)):
+    return templates.TemplateResponse("user_info.html", {"request": request, "user": current_user})
 
 @router.get("/logout/")
 async def logout():
