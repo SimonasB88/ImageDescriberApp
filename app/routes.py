@@ -16,7 +16,7 @@ import datetime
 load_dotenv()
 
 # Setup logging for better debugging
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
 app = FastAPI()
 router = APIRouter()
@@ -37,7 +37,7 @@ credentials_info = {
     'client_x509_cert_url': os.getenv('CLIENT_X509_CERT_URL')
 }
 
-logging.debug(f"Loaded credentials for project: {os.getenv('PROJECT_ID')}")
+# logging.debug(f"Loaded credentials for project: {os.getenv('PROJECT_ID')}")
 
 credentials = service_account.Credentials.from_service_account_info(credentials_info)
 client = vision.ImageAnnotatorClient(credentials=credentials)
