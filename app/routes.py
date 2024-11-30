@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Cookie
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, UploadFile, File, Cookie
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer
 from google.cloud import vision
@@ -12,14 +12,13 @@ from dotenv import load_dotenv
 import os
 import logging
 import datetime
-from fastapi.responses import RedirectResponse
-from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
 # Setup logging for better debugging
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
+app = FastAPI()
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -48,6 +47,7 @@ class Token(BaseModel):
     token_type: str
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
+    logging.debug(f"Token received: {token}")
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
@@ -55,14 +55,17 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         username = verify_token(token)
+        logging.debug(f"Username from token: {username}")
         if not username:
             raise credentials_exception
         user = find_user(username)
         if user is None:
             raise credentials_exception
         return user
-    except HTTPException as e:
+    except Exception as e:
+        logging.error(f"Error in token verification: {str(e)}")
         raise credentials_exception from e
+
 
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -165,13 +168,8 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
         logging.error(f"Error analyzing image: {str(e)}")
         return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
 
-
 @router.get("/history/", response_class=HTMLResponse)
-async def show_history(request: Request, token: str = Cookie(None)):
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    current_user = await get_current_user(token)
+async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
         results = [
@@ -193,7 +191,6 @@ async def logout():
     response.delete_cookie("Authorization")
     return response
 
-
 def read_index_html():
     file_path = os.path.join(os.path.dirname(__file__), "index.html")
     with open(file_path, "r") as file:
@@ -206,3 +203,5 @@ try:
     logging.debug("MongoDB connected successfully")
 except Exception as e:
     logging.error(f"MongoDB connection error: {e}")
+
+app.include_router(router)
