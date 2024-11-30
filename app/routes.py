@@ -47,11 +47,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-<<<<<<< HEAD
-async def get_current_user(token: str = Cookie(None)):
-=======
 async def get_current_user(token: str = Depends(oauth2_scheme)):
->>>>>>> parent of 9e4b728 (trying to debug authentication of history)
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
@@ -73,11 +69,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         logging.debug(f"Token after removing 'Bearer ' prefix: {token}")
         
         username = verify_token(token)
-<<<<<<< HEAD
-        logging.debug(f"Username from token: {username}")
-
-=======
->>>>>>> parent of 9e4b728 (trying to debug authentication of history)
         if not username:
             logging.debug("Token verification failed, no username extracted")
             raise credentials_exception
@@ -86,21 +77,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         if user is None:
             logging.debug("User not found in database")
             raise credentials_exception
-<<<<<<< HEAD
-
-        logging.debug(f"User found: {user}")
-        return user
-
-    except Exception as e:
-        logging.debug(f"Exception in get_current_user: {str(e)}")
-        raise credentials_exception from e
-
-=======
         return user
     except HTTPException as e:
         raise credentials_exception from e
 
->>>>>>> parent of 9e4b728 (trying to debug authentication of history)
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
