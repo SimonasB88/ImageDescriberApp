@@ -1,5 +1,5 @@
-from fastapi import FastAPI, APIRouter, Depends, HTTPException, Request, UploadFile, File, Cookie
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File, Cookie
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer
 from google.cloud import vision
@@ -12,13 +12,14 @@ from dotenv import load_dotenv
 import os
 import logging
 import datetime
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
 # Setup logging for better debugging
-# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
-app = FastAPI()
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -46,7 +47,11 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+<<<<<<< HEAD
 async def get_current_user(token: str = Cookie(None)):
+=======
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+>>>>>>> parent of 9e4b728 (trying to debug authentication of history)
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
@@ -68,8 +73,11 @@ async def get_current_user(token: str = Cookie(None)):
         logging.debug(f"Token after removing 'Bearer ' prefix: {token}")
         
         username = verify_token(token)
+<<<<<<< HEAD
         logging.debug(f"Username from token: {username}")
 
+=======
+>>>>>>> parent of 9e4b728 (trying to debug authentication of history)
         if not username:
             logging.debug("Token verification failed, no username extracted")
             raise credentials_exception
@@ -78,6 +86,7 @@ async def get_current_user(token: str = Cookie(None)):
         if user is None:
             logging.debug("User not found in database")
             raise credentials_exception
+<<<<<<< HEAD
 
         logging.debug(f"User found: {user}")
         return user
@@ -86,6 +95,12 @@ async def get_current_user(token: str = Cookie(None)):
         logging.debug(f"Exception in get_current_user: {str(e)}")
         raise credentials_exception from e
 
+=======
+        return user
+    except HTTPException as e:
+        raise credentials_exception from e
+
+>>>>>>> parent of 9e4b728 (trying to debug authentication of history)
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
@@ -187,8 +202,13 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
         logging.error(f"Error analyzing image: {str(e)}")
         return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
 
+
 @router.get("/history/", response_class=HTMLResponse)
-async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
+async def show_history(request: Request, token: str = Cookie(None)):
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    current_user = await get_current_user(token)
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
         results = [
@@ -214,6 +234,7 @@ async def logout():
     response.delete_cookie("Authorization")
     return response
 
+
 def read_index_html():
     file_path = os.path.join(os.path.dirname(__file__), "index.html")
     with open(file_path, "r") as file:
@@ -226,5 +247,3 @@ try:
     logging.debug("MongoDB connected successfully")
 except Exception as e:
     logging.error(f"MongoDB connection error: {e}")
-
-app.include_router(router)
