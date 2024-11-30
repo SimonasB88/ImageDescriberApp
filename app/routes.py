@@ -16,7 +16,7 @@ import datetime
 load_dotenv()
 
 # Setup logging for better debugging
-# logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG)
 
 app = FastAPI()
 router = APIRouter()
@@ -46,16 +46,17 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    logging.debug(f"Token received: {token}")
+async def get_current_user(token: str = Cookie(None)):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        if not token:
+            raise credentials_exception
+        token = token.replace("Bearer ", "")  # Remove the Bearer prefix if present
         username = verify_token(token)
-        logging.debug(f"Username from token: {username}")
         if not username:
             raise credentials_exception
         user = find_user(username)
@@ -63,9 +64,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             raise credentials_exception
         return user
     except Exception as e:
-        logging.error(f"Error in token verification: {str(e)}")
         raise credentials_exception from e
-
 
 @router.get("/", response_class=HTMLResponse)
 async def root(request: Request):
@@ -119,8 +118,7 @@ async def handle_login(request: Request):
             "index.html",
             {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
         )
-        response.headers["Authorization"] = f"Bearer {access_token}"
-        response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
+        response.set_cookie(key="Authorization", value=f"Bearer {access_token}", httponly=True)
         return response
     else:
         return templates.TemplateResponse(
@@ -184,7 +182,7 @@ async def show_history(request: Request, current_user: dict = Depends(get_curren
     except Exception as e:
         logging.error(f"Error fetching history: {str(e)}")
         return HTMLResponse(content=f"Error fetching history: {str(e)}", status_code=500)
-    
+
 @router.get("/logout/")
 async def logout():
     response = RedirectResponse(url="/")
