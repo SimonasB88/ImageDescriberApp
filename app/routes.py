@@ -46,7 +46,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+async def get_current_user(token: str = Cookie(None)):
     credentials_exception = HTTPException(
         status_code=401,
         detail="Could not validate credentials",
