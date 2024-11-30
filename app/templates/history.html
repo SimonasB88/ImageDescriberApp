@@ -18,7 +18,7 @@
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
             <h1 class="text-3xl font-bold underline align font-family">Upload History</h1>
-                <div class="results-container font-family">
+            <div class="results-container font-family">
                 {% if results %}
                     <ul class="list-group">
                     {% for item in results %}
@@ -29,6 +29,7 @@
                             {% for result in item.results %}
                                 {{ result.description }} ({{ result.score }}) <br>
                             {% endfor %}
+                            <hr>
                         </li>
                     {% endfor %}
                     </ul>
@@ -36,6 +37,7 @@
                     <p>No upload history found.</p>
                 {% endif %}
                 </div>
+            <a href="/authenticate" class="btn btn-link">Go back to upload another image</a>
         </div>
     </div>
 </body>
