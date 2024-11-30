@@ -167,10 +167,10 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
         logging.error(f"Error analyzing image: {str(e)}")
         
 @router.get("/history/", response_class=HTMLResponse)
-async def show_history(request: Request, Authorization: str = Cookie(None)):
+async def show_history(request: Request, Authorization: str = Cookie(...)):
     current_user = await get_current_user(Authorization)
     try:
-        records = history_collection.find({"user_id": current_user["_id"]})
+        records = list(history_collection.find({"user_id": current_user["_id"]}))
         results = [
             {
                 "file_name": record["file_name"],

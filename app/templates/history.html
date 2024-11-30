@@ -19,18 +19,16 @@
         <div class="text-center max-w-lg">
             <h1 class="text-3xl font-bold underline align font-family">Upload History</h1>
                 <div class="results-container font-family">
-                {% if history %}
+                {% if results %}
                     <ul class="list-group">
-                    {% for item in history %}
-                        <li class="list-group-item">
+                    {% for item in results %}
+                        <li style="list-style-type: none;">
                             <p><strong>File Name:</strong> {{ item.file_name }}</p>
-                            <p><strong>Timestamp:</strong> {{ item.timestamp }}</p>
-                            <p><strong>Results:</strong></p>
-                            <ul>
+                            <p><strong>When uploaded:</strong> {{ item.timestamp }}</p>
+                            <p><strong>Results (scores):</strong></p>
                             {% for result in item.results %}
-                                <li>{{ result.description }} ({{ result.score }})</li>
+                                {{ result.description }} ({{ result.score }}) <br>
                             {% endfor %}
-                            </ul>
                         </li>
                     {% endfor %}
                     </ul>
