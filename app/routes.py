@@ -133,6 +133,7 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
+        raise HTTPException(status_code=401, detail="Not authenticated")
     current_user = await get_current_user(token)
 
     try:
@@ -163,10 +164,10 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
 
     except Exception as e:
         logging.error(f"Error analyzing image: {str(e)}")
-        return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
-
+        
 @router.get("/history/", response_class=HTMLResponse)
-async def show_history(request: Request, current_user: dict = Depends(get_current_user)):
+async def show_history(request: Request, Authorization: str = Cookie(None)):
+    current_user = await get_current_user(Authorization)
     try:
         records = history_collection.find({"user_id": current_user["_id"]})
         results = [
@@ -177,7 +178,7 @@ async def show_history(request: Request, current_user: dict = Depends(get_curren
             }
             for record in records
         ]
-        return templates.TemplateResponse("history.html", {"request": request, "results": results})
+        return templates.TemplateResponse("history.html", {"request": request, "results": results, "user": current_user})
     except Exception as e:
         logging.error(f"Error fetching history: {str(e)}")
         return HTMLResponse(content=f"Error fetching history: {str(e)}", status_code=500)
