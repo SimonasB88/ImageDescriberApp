@@ -94,7 +94,7 @@ async def handle_register(request: Request):
         add_user({"username": username, "password": password})
         return templates.TemplateResponse("login.html", {"request": request, "message": "Thank you for registration, you may login!"})
 
-@router.post("/authenticate", response_class=HTMLResponse)
+@router.post("/authenticate/", response_class=HTMLResponse)
 async def handle_login(request: Request):
     form = await request.form()
     username = form.get("username")
