@@ -15,9 +15,6 @@ import datetime
 
 load_dotenv()
 
-# Setup logging for better debugging
-# logging.basicConfig(level=logging.DEBUG)
-
 app = FastAPI()
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
