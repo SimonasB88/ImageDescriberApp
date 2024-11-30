@@ -133,6 +133,7 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
+    if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
     current_user = await get_current_user(token)
 
