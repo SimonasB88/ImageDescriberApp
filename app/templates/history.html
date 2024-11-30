@@ -18,24 +18,26 @@
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
             <h1 class="text-3xl font-bold underline align font-family">Upload History</h1>
-            {% if history %}
-                <ul class="list-group">
-                {% for item in history %}
-                    <li class="list-group-item">
-                        <p><strong>File Name:</strong> {{ item.file_name }}</p>
-                        <p><strong>Timestamp:</strong> {{ item.timestamp }}</p>
-                        <p><strong>Results:</strong></p>
-                        <ul>
-                        {% for result in item.results %}
-                            <li>{{ result.description }} ({{ result.score }})</li>
-                        {% endfor %}
-                        </ul>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>No upload history found.</p>
-            {% endif %}
+                <div class="results-container font-family">
+                {% if history %}
+                    <ul class="list-group">
+                    {% for item in history %}
+                        <li class="list-group-item">
+                            <p><strong>File Name:</strong> {{ item.file_name }}</p>
+                            <p><strong>Timestamp:</strong> {{ item.timestamp }}</p>
+                            <p><strong>Results:</strong></p>
+                            <ul>
+                            {% for result in item.results %}
+                                <li>{{ result.description }} ({{ result.score }})</li>
+                            {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No upload history found.</p>
+                {% endif %}
+                </div>
         </div>
     </div>
 </body>
