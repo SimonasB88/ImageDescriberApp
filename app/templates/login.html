@@ -9,14 +9,10 @@
 </head>
 <body>
     <div class="background-svg-pattern font-family flex-right">
-        <table class="background-svg-pattern flex justify-center items-center min-h-screene">
-            <tr>
-                <a href="/login/">Login</a>
-            </tr>
-            <tr>
-                <a href="/register/">Register</a>
-            </tr>
-        </table>
+        <div class="flex justify-center items-start">
+            <a href="/login/" class="block p-4 text-lg">Login</a>
+            <a href="/register/" class="block p-4 text-lg">Register</a>
+        </div>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
@@ -30,14 +26,14 @@
                 <p style="color: red;">{{ error }}</p>
             {% endif %}
             <div class="text-center max-w-lg">
-                <form action="/authenticate" method="post" class="button results-container">
+                <form action="/authenticate/" method="post" class="button results-container">
                     <div class="form-group mt-2">
                         <label for="username">Username:</label>
                         <input type="text" id="username" name="username" class="form-control" required>
                         <label for="password">Password:</label>
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="submit" class="btn btn-primary mt-3">Login</button>
                 </form>
             </div>
         </div>      
