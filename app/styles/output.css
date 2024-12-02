@@ -1,3 +1,11 @@
+a {
+    text-decoration: none;
+    color: #3182ce;
+}
+a:hover {
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 .align {
     text-align: center;
 }
@@ -26,7 +34,6 @@
 .button-style {
     background-color: #127fa0;
     border: none;
-    border-radius: 5px;
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -41,12 +48,11 @@
     transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.4s;
 }
 .background-svg-pattern {
-    background-image: linear-gradient(to right, #470055, #00486a);
+    background-image: linear-gradient(to left, #470055, #00486a);
 }
 .results-container {
     background-color: #91a8d416; 
-    border: 1px solid #90cdf4; 
-    border-radius: 0.5rem; 
+    border: 1px solid rgba(144, 205, 244, 0.5);
     padding: 5rem; 
     text-align: center; 
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -110,6 +116,7 @@
     border-top: 4px solid #3498db; /* Blue */
     width: 40px;
     height: 40px;
+    border-radius: 50%; /* Make the loader rounded */
     animation: spin 1s linear infinite;
     display: none; /* Hide loader initially */
     margin: 20px auto;
