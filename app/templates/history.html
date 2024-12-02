@@ -17,7 +17,7 @@
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
-            <h1 class="text-3xl font-bold underline align font-family">Upload History</h1>
+            <h1 class="text-3xl font-bold underline align font-family">Your upload history:</h1>
             <div class="results-container font-family">
                 {% if results %}
                     <ul class="list-group">
@@ -26,9 +26,13 @@
                             <p><strong>File Name:</strong> {{ item.file_name }}</p>
                             <p><strong>When uploaded:</strong> {{ item.timestamp }}</p>
                             <p><strong>Results (scores):</strong></p>
-                            {% for result in item.results %}
-                                {{ result.description }} ({{ result.score }}) <br>
-                            {% endfor %}
+                            {% if item.results %}
+                                {% for result in item.results %}
+                                    {{ result.description }} ({{ result.score }}) <br>
+                                {% endfor %}
+                            {% else %}
+                                <p>Sorry, no scores for this...</p>
+                            {% endif %}
                             <hr>
                         </li>
                     {% endfor %}

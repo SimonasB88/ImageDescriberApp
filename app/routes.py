@@ -133,16 +133,10 @@ async def handle_login(request: Request):
         )
 
 @router.post("/analyze-image/", response_class=HTMLResponse)
-async def analyze_image(request: Request, file: UploadFile = File(...)):
-    form = await request.form()
-    token = form.get("token")
-
-    if not token:
+async def analyze_image(request: Request, file: UploadFile = File(...), Authorization: str = Cookie(None)):
+    if not Authorization:
         raise HTTPException(status_code=401, detail="Not authenticated")
-
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    current_user = await get_current_user(token)
+    current_user = await get_current_user(Authorization)
 
     try:
         max_size = 10 * 1024 * 1024  # 10MB
@@ -172,6 +166,7 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
 
     except Exception as e:
         logging.error(f"Error analyzing image: {str(e)}")
+        return templates.TemplateResponse("index.html", {"request": request, "error": "Error analyzing image."})
         
 @router.get("/history/", response_class=HTMLResponse)
 async def show_history(request: Request, Authorization: str = Cookie(...)):
