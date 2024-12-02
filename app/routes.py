@@ -124,6 +124,10 @@ async def handle_login(request: Request):
             "login.html",
             {"request": request, "error": "Invalid username or password."}
         )
+        
+@router.get("/authenticate/", response_class=HTMLResponse)
+async def handle_login(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @router.post("/analyze-image/", response_class=HTMLResponse)
 async def analyze_image(request: Request, file: UploadFile = File(...)):
@@ -133,8 +137,6 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
 
-    if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
     current_user = await get_current_user(token)
 
     try:
@@ -165,6 +167,11 @@ async def analyze_image(request: Request, file: UploadFile = File(...)):
 
     except Exception as e:
         logging.error(f"Error analyzing image: {str(e)}")
+        return HTMLResponse(content=f"Error analyzing image: {str(e)}", status_code=500)
+
+@router.get("/analyze-image/", response_class=HTMLResponse)
+async def analyze_image_form(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
         
 @router.get("/history/", response_class=HTMLResponse)
 async def show_history(request: Request, Authorization: str = Cookie(...)):
