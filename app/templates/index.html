@@ -13,11 +13,6 @@
             <tr>
                 <a href="/logout/">Log out</a>
             </tr>
-            {% if user %}
-            <tr>
-                <a href="/history/">History</a>
-            </tr>
-            {% endif %}
         </table>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
@@ -26,7 +21,7 @@
             <p style="color: green;">{{ message }}</p>
             {% endif %}
             <h1 class="text-3xl font-bold underline align font-family">
-                Please upload an image and I will describe it for you!
+                Hello dear <b>{{ username }}</b>, <br> Please upload an image and I will describe it for you!
             </h1>
             <div class="align">
                 <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">

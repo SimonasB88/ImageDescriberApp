@@ -72,6 +72,13 @@ async def root(request: Request):
 async def login(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
+@router.get("/main/", response_class=HTMLResponse)
+async def main(request: Request, Authorization: str = Cookie(None)):
+    if not Authorization:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    current_user = await get_current_user(Authorization)
+    return templates.TemplateResponse("index.html", {"request": request, "username": current_user["username"]})
+
 @router.get("/register/", response_class=HTMLResponse)
 async def register(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
@@ -114,7 +121,7 @@ async def handle_login(request: Request):
         )
         response = templates.TemplateResponse(
             "index.html",
-            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token}
+            {"request": request, "message": f"Successfully logged in {username}!", "token": access_token, "username": username}
         )
         response.headers["Authorization"] = f"Bearer {access_token}"
         response.headers["Set-Cookie"] = f"Authorization={access_token}; Path=/; HttpOnly"
