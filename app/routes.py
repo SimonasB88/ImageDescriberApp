@@ -193,7 +193,7 @@ async def logout():
     return response
 
 def read_index_html():
-    file_path = os.path.join(os.path.dirname(__file__), "index.html")
+    file_path = os.path.join(os.path.dirname(__file__), "./templates/index.html")
     with open(file_path, "r") as file:
         html_content = file.read()
     return html_content
