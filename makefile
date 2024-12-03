@@ -24,4 +24,8 @@ status:
 logs:
 	docker-compose -f $(COMPOSE_FILE) logs -f
 
+# Run the tests
+test:
+	cd ./app/tests && pytest
+
 .PHONY: build up down restart status logs
