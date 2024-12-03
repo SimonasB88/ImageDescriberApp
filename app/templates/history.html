@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload History</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="/styles/output.css" rel="stylesheet">
+</head>
+<body>
+    <div class="background-svg-pattern font-family flex-right">
+        <div class="flex justify-center items-start">
+            <a href="/logout/" class="block p-4 text-lg">Logout</a>
+        </div>
+    </div>
+    <div class="background-svg-pattern flex justify-center items-center min-h-screen">
+        <div class="text-center max-w-lg">
+            <h1 class="text-3xl font-bold underline align font-family">Your upload history:</h1>
+            <div class="results-container font-family">
+                {% if results %}
+                    <ul class="list-group">
+                    {% for item in results %}
+                        <li style="list-style-type: none;">
+                            <p><strong>File Name:</strong> {{ item.file_name }}</p>
+                            <p><strong>When uploaded:</strong> {{ item.timestamp }}</p>
+                            <p><strong>Results (scores):</strong></p>
+                            {% if item.results %}
+                                {% for result in item.results %}
+                                    {{ result.description }} ({{ result.score }}) <br>
+                                {% endfor %}
+                            {% else %}
+                                <p>Sorry, no scores for this...</p>
+                            {% endif %}
+                            <hr>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No upload history found.</p>
+                {% endif %}
+                </div>
+            <a href="/main/" class="btn btn-link">Go back to upload another image</a>
+        </div>
+    </div>
+</body>
+</html>

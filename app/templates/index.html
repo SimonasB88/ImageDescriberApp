@@ -5,33 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link href="./styles/output.css" rel="stylesheet">
-    <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link href="/styles/output.css" rel="stylesheet">
 </head>
 <body>
     <div class="background-svg-pattern font-family flex-right">
-        <table class="background-svg-pattern flex justify-center items-center min-h-screene">
-            <tr>
-                <a href="/">Home</a>
-            </tr>
-            <tr>
-                <a href="/login/">Login</a>
-            </tr>
-            <tr>
-                <a href="/register/">Register</a>
-            </tr>
-        </table>
+        <div class="flex justify-center items-start">
+            <a href="/logout/" class="block p-4 text-lg">Logout</a>
+        </div>
     </div>
     <div class="background-svg-pattern flex justify-center items-center min-h-screen">
         <div class="text-center max-w-lg">
+            {% if message %}
+            <p style="color: green;">{{ message }}</p>
+            {% endif %}
             <h1 class="text-3xl font-bold underline align font-family">
-                Please upload an image and I will describe it for you!
+                Hello dear <b>{{ username }}</b>, <br> Please upload an image and I will describe it for you!
             </h1>
             <div class="align">
                 <form id="uploadForm" action="/analyze-image/" method="post" enctype="multipart/form-data" class="button results-container">
                     <input type="file" id="file" name="file" accept="image/*">
                     <div id="fileName" class="mt-2"></div>
                     <label for="file" class="btn btn-primary custom-file-upload btn btn-dark">Browse...</label>
+                    <input type="hidden" name="token" value="{{ token }}">
                     <button type="submit" class="btn btn-primary">Upload</button>
                 <script>
                     document.getElementById('file').addEventListener('change', function() {
@@ -52,7 +48,7 @@
                 <!-- Loader Element -->
                 <div class="loader" id="loader"></div>
             </div>
-            <a href="/history/" class="btn btn-link">View history</a>
+            <a href="/history/" class="btn btn-link">View your personal upload history</a>
         </div>
 
         <script src="/static/js/bootstrap.bundle.min.js"></script>

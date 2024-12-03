@@ -1,0 +1,24 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-db-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  fastapi:
+    build: .
+    container_name: fastapi-container
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+
+volumes:
+  mongo-data:
