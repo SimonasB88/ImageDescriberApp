@@ -29,4 +29,4 @@ logs:
 test:
 	docker exec -i ${CONTAINER_NAME} sh -c "cd /app/app && pip install --upgrade httpx starlette && ls && pytest"
 
-.PHONY: build up down restart status logs
+.PHONY: build up down restart status logs test
