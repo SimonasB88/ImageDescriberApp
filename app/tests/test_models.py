@@ -1,10 +1,12 @@
 import pytest
 from models import get_password_hash, verify_password, add_user, find_user
 from pymongo import MongoClient
+import os
 
 @pytest.fixture(scope="module")
 def mongo_client():
-    client = MongoClient("mongodb://localhost:27017/")
+    MONGO_URL = os.getenv("MONGO_URL")
+    client = MongoClient(MONGO_URL)
     yield client
     client.close()
 

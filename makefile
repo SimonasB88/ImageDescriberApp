@@ -1,5 +1,6 @@
 # Variables
 COMPOSE_FILE=docker-compose.yml
+CONTAINER_NAME=fastapi-container
 
 # Build the Docker images
 build:
@@ -26,6 +27,6 @@ logs:
 
 # Run the tests
 test:
-	cd ./app/tests && pytest
+	docker exec -i ${CONTAINER_NAME} sh -c "cd /app/app && pip install httpx starlette && ls && pytest"
 
 .PHONY: build up down restart status logs
