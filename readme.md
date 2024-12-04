@@ -18,3 +18,38 @@ More information about [Google Vision API and OCR Label Detection](https://cloud
 
 ## Installation
 
+App is dockerized (make sure you have Docker) and uses makefile shortcuts, so to launch it, simply run from root:
+
+```
+make build
+```
+
+After build is finished, run:
+```
+make up
+```
+## Additional commands for app managing
+
+```
+# Stop the services
+make down
+
+# Restart the services
+make restart
+
+# Show the status of the services
+make status
+
+# Tail logs of the services
+make logs
+
+# Run the tests
+make test
+```
+
+## Tehcnologies used
+
+- FastAPI
+- Docker
+- Pytest
+- Google Cloud API
