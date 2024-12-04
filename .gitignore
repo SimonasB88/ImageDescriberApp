@@ -8,3 +8,4 @@ responsive-amp**
 /newenv
 /app/venv
 /app/__pycache__
+/app/tests/__pycache__
