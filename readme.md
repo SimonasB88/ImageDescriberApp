@@ -16,7 +16,40 @@ These applications leverage the confidence score to ensure accurate and reliable
 
 More information about [Google Vision API and OCR Label Detection](https://cloud.google.com/vision/docs/features-list).
 
-## Installation
+## Generating a Google Vision API Key
+
+To use the Google Vision API in this project, you'll need to generate an API key. Follow these steps:
+
+1. **Go to the Google Cloud Console**:
+   - Navigate to the [Google Cloud Console](https://console.cloud.google.com/).
+
+2. **Create a New Project**:
+   - Click on the project drop-down at the top of the page.
+   - Select "New Project."
+   - Enter a name for your project and click "Create."
+
+3. **Enable the Vision API**:
+   - After the project is created, make sure it is selected.
+   - Go to the [Vision API page](https://console.cloud.google.com/apis/library/vision.googleapis.com).
+   - Click "Enable" to enable the Vision API for your project.
+
+4. **Create Credentials**:
+   - In the left-hand menu, navigate to "APIs & Services" > "Credentials."
+   - Click on "Create Credentials" and select "API key."
+   - Your new API key will be created and displayed. Copy it for later use.
+
+5. **Restrict Your API Key (Optional but recommended)**:
+   - Click on the "Edit API key" (pencil icon) next to your newly created key.
+   - Under "API restrictions," select "Restrict key."
+   - Add the Google Vision API to the list of APIs that the key can access.
+   - Save the changes.
+
+6. **Store the API Key Securely to your gitignored `.env` file**:
+   - Refactor your API key as the `.env.example` file is defined. Place the `.json` retrieved from Google vision API securely and never expose it publicly.
+
+You can now use this API key in your application to make requests to the Google Vision API.
+
+## Installation of the app
 
 App is dockerized (make sure you have Docker) and uses makefile shortcuts, so to launch it, simply run from root:
 
@@ -50,6 +83,7 @@ make test
 ## Tehcnologies used
 
 - FastAPI
+- Jinja 2
 - Docker
 - Pytest
 - Google Cloud API
