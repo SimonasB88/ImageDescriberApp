@@ -84,6 +84,7 @@ make test
 
 - FastAPI
 - Jinja 2
+- MongoDB
 - Docker
 - Pytest
 - Google Cloud API
